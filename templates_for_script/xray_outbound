@@ -6,25 +6,20 @@
       {
         "address": "$VLESS_DOMAIN",
         "port": 443,
-        "users": [
-          {
-            "id": "$XRAY_UUID",
-            "encryption": "none",
-            "flow": "xtls-rprx-vision"
-          }
-        ]
+        "users": [{ "id": "$XRAY_UUID", "encryption": "none" }]
       }
     ]
   },
   "streamSettings": {
-    "network": "tcp",
+    "network": "xhttp",
     "security": "reality",
+    "xhttpSettings": { "mode": "auto" },
     "realitySettings": {
       "serverName": "$VLESS_DOMAIN",
       "fingerprint": "chrome",
       "publicKey": "$XRAY_PBK",
-      "shortId": "$XRAY_SID",
-      "spiderX": ""
+      "shortId": "",
+      "spiderX": "/"
     }
   }
 }

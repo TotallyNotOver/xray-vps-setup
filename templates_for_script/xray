@@ -1,76 +1,44 @@
 {
-  "log": {
-    "loglevel": "none"
-  },
+  "log": { "loglevel": "none" },
   "inbounds": [
     {
-      "tag": "VLESS TCP VISION REALITY",
-      "listen": "0.0.0.0",
+      "tag": "VLESS XHTTP REALITY",
       "port": 443,
       "protocol": "vless",
       "settings": {
-        "clients": [
-          {
-            "id": "$XRAY_UUID",
-            "email": "default",
-            "flow": "xtls-rprx-vision"
-          }
-        ],
+        "clients": [{ "id": "$XRAY_UUID", "email": "default" }],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": { "mode": "auto" },
         "realitySettings": {
           "xver": 1,
           "dest": "127.0.0.1:4123",
-          "serverNames": [
-            "$VLESS_DOMAIN"
-          ],
+          "serverNames": ["$VLESS_DOMAIN"],
           "privateKey": "$XRAY_PIK",
           "publicKey": "$XRAY_PBK",
-          "shortIds": [
-            ""
-          ]
+          "shortIds": [""]
         }
       },
       "sniffing": {
         "enabled": true,
-        "destOverride": [
-          "http",
-          "tls"
-        ],
+        "destOverride": ["http", "tls"],
         "routeOnly": true
       }
     }
   ],
   "outbounds": [
-    {
-      "protocol": "freedom",
-      "tag": "direct",
-      "settings": {
-        "domainStrategy": "UseIPv4"
-      }
-    },
-    {
-      "protocol": "blackhole",
-      "tag": "block"
-    }
+    { "protocol": "freedom", "tag": "direct", "settings": { "domainStrategy": "UseIPv4" } },
+    { "protocol": "blackhole", "tag": "block" }
   ],
   "routing": {
-    "rules": [
-      {
-        "protocol": "bittorrent",
-        "outboundTag": "block"
-      }
-    ],
+    "rules": [{ "protocol": "bittorrent", "outboundTag": "block" }],
     "domainStrategy": "IPIfNonMatch"
   },
   "dns": {
-    "servers": [
-      "1.1.1.1",
-      "8.8.8.8"
-    ],
+    "servers": ["1.1.1.1", "9.9.9.9"],
     "queryStrategy": "UseIPv4",
     "disableFallback": false,
     "tag": "dns-aux"
