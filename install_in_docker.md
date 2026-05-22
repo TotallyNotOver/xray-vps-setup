@@ -84,8 +84,10 @@ sudo usermod -aG docker $USER
 - __VLESS_DOMAIN__: Ваш домен. Если используется punycode, то далее используется ТОЛЬКО на латинице.  
 - __XRAY_PBK+PIK__: `docker run --rm ghcr.io/xtls/xray-core x25519`
 Оба значения для нас важны, Public key = PBK, Password = PIK.  
-- __XRAY_SID__: ``
-Short id, а не генерируем его. Рудимент, который не особо нужен.    
+- __XRAY_SID__: `openssl rand -hex 4`
+ShortId для REALITY. Раньше оставляли пустым, теперь генерируем случайный для каждой установки.
+- __XHTTP_PATH__: `openssl rand -hex 8`
+Случайный путь для XHTTP. Делает сигнатуру уникальной для каждого сервера.
 
 Следующие данные нужны только если вы будете устанавливать панель Marzban.  
 - __MARZBAN_USER__: `grep -E '^[a-z]{4,6}$' /usr/share/dict/words | shuf -n 1`  
@@ -325,23 +327,23 @@ wget -qO- https://raw.githubusercontent.com/Jolymmiles/confluence-marzban-home/m
   },
   "inbounds": [
     {
-      "tag": "VLESS TCP VISION REALITY",
+      "tag": "VLESS XHTTP REALITY",
       "listen": "0.0.0.0",
       "port": 443,
       "protocol": "vless",
       "settings": {
         "clients": [
           {
-            "id": "XRAY_UUDI", // ПОМЕНЯТЬ НА СВОЕ
-            "email": "default",
-            "flow": "xtls-rprx-vision"
+            "id": "XRAY_UUID", // ПОМЕНЯТЬ НА СВОЕ
+            "email": "default"
           }
         ],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": { "mode": "auto", "path": "/XHTTP_PATH" }, // ПОМЕНЯТЬ НА СВОЕ
         "realitySettings": {
           "xver": 1,
           "dest": "127.0.0.1:4123",
@@ -350,7 +352,7 @@ wget -qO- https://raw.githubusercontent.com/Jolymmiles/confluence-marzban-home/m
           ],
           "privateKey": "XRAY_PIK", // ПОМЕНЯТЬ НА СВОЕ
           "shortIds": [
-            "" 
+            "XRAY_SID" // ПОМЕНЯТЬ НА СВОЕ
           ]
         }
       },
@@ -447,4 +449,4 @@ docker compose -f /opt/xray-vps-setup/docker-compose.yml down && docker compose 
 
 #
 
-Если вы хотите помочь что-то исправить, добавить и тд, то делайте PR или пишите в [ТГ](https://t.me/Akiyamov).
+Если вы хотите помочь что-то исправить, добавить и тд, то делайте PR или пишите в [ТГ](https://t.me/OverLessArtem).
