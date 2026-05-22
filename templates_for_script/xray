@@ -12,14 +12,14 @@
       "streamSettings": {
         "network": "xhttp",
         "security": "reality",
-        "xhttpSettings": { "mode": "auto" },
+        "xhttpSettings": { "mode": "auto", "path": "/$XHTTP_PATH" },
         "realitySettings": {
           "xver": 1,
           "dest": "127.0.0.1:4123",
           "serverNames": ["$VLESS_DOMAIN"],
           "privateKey": "$XRAY_PIK",
           "publicKey": "$XRAY_PBK",
-          "shortIds": [""]
+          "shortIds": ["$XRAY_SID"]
         }
       },
       "sniffing": {

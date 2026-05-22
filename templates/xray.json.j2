@@ -4,22 +4,22 @@
   },
   "inbounds": [
     {
-      "tag": "VLESS TCP VISION REALITY",
+      "tag": "VLESS XHTTP REALITY",
       "listen": "0.0.0.0",
       "port": 443,
       "protocol": "vless",
       "settings": {
         "clients": [
         {
-          "id": "{{ xray_uuid.stdout}}",
-          "email": "default",
-          "flow": "xtls-rprx-vision"
+          "id": "{{ xray_uuid.stdout }}",
+          "email": "default"
         }],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": { "mode": "auto", "path": "/{{ xhttp_path }}" },
         "realitySettings": {
           "xver": 1,
           "dest": "127.0.0.1:4123",
@@ -27,8 +27,9 @@
             "{{ domain }}"
           ],
           "privateKey": "{{ x25519_pik.stdout }}",
+          "publicKey": "{{ x25519_pbk.stdout }}",
           "shortIds": [
-            ""
+            "{{ xray_sid }}"
           ]
         }
       },

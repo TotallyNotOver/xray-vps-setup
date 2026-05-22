@@ -27,6 +27,15 @@
       shell:
         cmd: docker run --rm ghcr.io/xtls/xray-core uuid
       register: xray_uuid
+    - name: Generate xhttp path
+      set_fact:
+        xhttp_path: "{{ lookup('password', '/dev/null length=16 chars=hexdigits') }}"
+    - name: Generate xray shortId
+      set_fact:
+        xray_sid: "{{ lookup('password', '/dev/null length=8 chars=hexdigits') }}"
+    - name: Set xray remark
+      set_fact:
+        xray_remark: "Script"
 - name: Install marzban
   include_tasks: install_marzban.yml
   when: setup_variant == "marzban"

@@ -13,12 +13,12 @@
   "streamSettings": {
     "network": "xhttp",
     "security": "reality",
-    "xhttpSettings": { "mode": "auto" },
+    "xhttpSettings": { "mode": "auto", "path": "/$XHTTP_PATH" },
     "realitySettings": {
       "serverName": "$VLESS_DOMAIN",
       "fingerprint": "chrome",
       "publicKey": "$XRAY_PBK",
-      "shortId": "",
+      "shortId": "$XRAY_SID",
       "spiderX": "/"
     }
   }

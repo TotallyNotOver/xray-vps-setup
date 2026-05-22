@@ -1,7 +1,7 @@
 - name: Print clipboard string
   debug:
-    msg: "vless://{{ xray_uuid.stdout }}@{{ vless.domain }}:443?type=tcp&security=reality&pbk={{ x25519_pbk.stdout }}&fp=chrome&sni={{ vless.domain }}&sid=&spx=%2F&flow=xtls-rprx-vision"
-- name: XRay outbound config 
+    msg: "vless://{{ xray_uuid.stdout }}@{{ vless.domain }}:443?type=xhttp&security=reality&mode=auto&path=%2F{{ xhttp_path }}&pbk={{ x25519_pbk.stdout }}&fp=chrome&sni={{ vless.domain }}&sid={{ xray_sid }}#{{ xray_remark }}"
+- name: XRay outbound config
   debug:
     msg: |
           {
@@ -15,22 +15,22 @@
                   "users": [
                     {
                       "id": "{{ xray_uuid.stdout }}",
-                      "encryption": "none",
-                      "flow": "xtls-rprx-vision"
+                      "encryption": "none"
                     }
                   ]
                 }
               ]
             },
             "streamSettings": {
-              "network": "tcp",
+              "network": "xhttp",
               "security": "reality",
+              "xhttpSettings": { "mode": "auto", "path": "/{{ xhttp_path }}" },
               "realitySettings": {
                 "serverName": "{{ vless.domain }}",
                 "fingerprint": "chrome",
                 "publicKey": "{{ x25519_pbk.stdout }}",
-                "shortId": "",
-                "spiderX": ""
+                "shortId": "{{ xray_sid }}",
+                "spiderX": "/"
               }
             }
           }
@@ -42,10 +42,8 @@
               "server": "{{ vless.domain }}",
               "server_port": 443,
               "uuid": "{{ xray_uuid.stdout }}",
-              "flow": "xtls-rprx-vision",
               "tls": {
                   "enabled": true,
-                  "insecure": false,
                   "server_name": "{{ vless.domain }}",
                   "utls": {
                       "enabled": true,
@@ -54,10 +52,15 @@
                   "reality": {
                       "enabled": true,
                       "public_key": "{{ x25519_pbk.stdout }}",
-                      "short_id": ""
+                      "short_id": "{{ xray_sid }}"
                   }
+              },
+              "transport": {
+                  "type": "xhttp",
+                  "path": "/{{ xhttp_path }}",
+                  "mode": "auto"
               }
           }
 - name: Print PBK, SID and UUID to connect to server.
   debug:
-    msg: "UUID: {{ xray_uuid.stdout }}, PBK: {{ x25519_pbk.stdout }}"
+    msg: "UUID: {{ xray_uuid.stdout }}, PBK: {{ x25519_pbk.stdout }}, SID: {{ xray_sid }}, Path: /{{ xhttp_path }}"

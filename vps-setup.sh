@@ -152,6 +152,17 @@ if [[ "$INSTALL_MODE" != "node" ]]; then
   export XRAY_PIK=$(docker run --rm ghcr.io/xtls/xray-core:26.3.27 x25519 | head -n1 | cut -d' ' -f 2)
   export XRAY_PBK=$(docker run --rm ghcr.io/xtls/xray-core:26.3.27 x25519 -i $XRAY_PIK | tail -2 | head -1 | cut -d' ' -f 3)
   export XRAY_UUID=$(docker run --rm ghcr.io/xtls/xray-core uuid)
+  export XHTTP_PATH=$(openssl rand -hex 8)
+
+  read -ep "Do you want to set a custom shortId? [y/N] "$'\n' custom_sid_input
+  if [[ ${custom_sid_input,,} == "y" ]]; then
+    read -ep "Enter shortId (hex characters): "$'\n' XRAY_SID
+  else
+    export XRAY_SID=$(openssl rand -hex 4)
+  fi
+
+  read -ep "Enter a name for the config (default: Script): "$'\n' XRAY_REMARK
+  export XRAY_REMARK=${XRAY_REMARK:-Script}
 fi
 
 # Install marzban
@@ -527,7 +538,7 @@ Password: $MARZBAN_PASS
     singbox_config=$(wget -qO- "https://raw.githubusercontent.com/$GIT_REPO/refs/heads/$GIT_BRANCH/templates_for_script/sing_box_outbound" | envsubst)
 
     final_msg="Clipboard string format:
-vless://$XRAY_UUID@$VLESS_DOMAIN:443?type=xhttp&security=reality&mode=auto&pbk=$XRAY_PBK&fp=chrome&sni=$VLESS_DOMAIN#Script
+vless://$XRAY_UUID@$VLESS_DOMAIN:443?type=xhttp&security=reality&mode=auto&path=%2F$XHTTP_PATH&pbk=$XRAY_PBK&fp=chrome&sni=$VLESS_DOMAIN&sid=$XRAY_SID#$XRAY_REMARK
 
 XRay outbound config:
 $xray_config
@@ -536,7 +547,7 @@ Sing-box outbound config:
 $singbox_config
 
 Plain data:
-PBK: $XRAY_PBK, UUID: $XRAY_UUID
+PBK: $XRAY_PBK, UUID: $XRAY_UUID, SID: $XRAY_SID, Path: /$XHTTP_PATH
     "
   fi
 

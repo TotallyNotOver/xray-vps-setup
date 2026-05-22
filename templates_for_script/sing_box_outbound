@@ -13,12 +13,12 @@
         "reality": {
             "enabled": true,
             "public_key": "$XRAY_PBK",
-            "short_id": ""
+            "short_id": "$XRAY_SID"
         }
     },
     "transport": {
         "type": "xhttp",
-        "path": "/",
+        "path": "/$XHTTP_PATH",
         "mode": "auto"
     }
 }
